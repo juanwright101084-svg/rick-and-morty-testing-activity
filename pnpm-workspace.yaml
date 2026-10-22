@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 allowBuilds:
   sharp: set this to true or false
   unrs-resolver: set this to true or false
+=======
+>>>>>>> e9f4d1a8ed0afc7e0d25100640608ed62ebf1ef0
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
