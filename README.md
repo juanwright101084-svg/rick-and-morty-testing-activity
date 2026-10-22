@@ -1,305 +1,186 @@
-<<<<<<< HEAD
-# Rick and Morty Explorer
+# Rick and Morty Explorer — pruebas y cobertura
 
-Aplicación web de exploración de personajes de **Rick and Morty**. Este README documenta un flujo reproducible para crear y publicar un fork en GitHub, ejecutar la validación local, conservar el reporte HTML de cobertura y adjuntar evidencia.
+Aplicación React/Next.js para explorar personajes y episodios de *Rick and Morty*. Este README documenta la configuración de **Vitest**, el alcance de las pruebas y la evidencia que debe acompañar la entrega.
 
-> **Estado de esta entrega:** las capturas disponibles muestran 100 % en Statements, Branches, Functions y Lines. También se reportan 30 pruebas exitosas en la evidencia disponible; el conteo debe volver a ejecutarse en el entorno local antes de considerarlo verificado.
+> **Estado declarado del proyecto**
+>
+> El estado de éxito indicado por la persona responsable del proyecto es que las pruebas funcionan correctamente y que **Statements, Branches, Functions y Lines superan el 80 %**. Esta afirmación se conserva como estado reportado; no ha sido ejecutada ni verificada de forma independiente en este entorno porque no se entregó el repositorio fuente completo.
 
-## Requisitos
+## Requisitos de la asignación
 
-- Windows con PowerShell.
-- Git instalado y configurado con la identidad de la cuenta que publicará el fork.
-- Node.js y pnpm instalados.
-- Acceso a GitHub para crear el fork y publicar cambios.
+- Configurar y ejecutar pruebas con **Vitest**.
+- Cubrir componentes React, utilidades y lógica de negocio.
+- Ejecutar la cobertura con el comando exacto:
 
-No se incluyen credenciales, tokens ni una URL de repositorio porque no fueron proporcionados.
+  ```bash
+  vitest run --coverage
+  ```
 
-## 1. Crear y clonar un fork en GitHub
+- Mantener **más de 80 %** en todas las métricas exigidas:
 
-1. Abre en el navegador la página del repositorio original.
-2. Selecciona **Fork** y elige tu cuenta u organización de destino.
-3. Conserva el nombre del repositorio o elige uno identificable, según las reglas del proyecto.
-4. No marques ni desmarques opciones de visibilidad sin confirmar la política del repositorio.
-5. Copia la URL HTTPS o SSH que GitHub muestre para **tu fork**.
-6. En PowerShell, reemplaza los valores entre `<...>` por datos reales:
+  | Métrica | Requisito | Estado reportado |
+  | --- | ---: | --- |
+  | Statements | > 80 % | Cumple, según la afirmación del proyecto |
+  | Branches | > 80 % | Cumple, según la afirmación del proyecto |
+  | Functions | > 80 % | Cumple, según la afirmación del proyecto |
+  | Lines | > 80 % | Cumple, según la afirmación del proyecto |
 
-```powershell
-Set-Location C:\xampp\htdocs
+- Generar el informe HTML dentro de `coverage/`.
+- Entregar evidencia de consola y del informe HTML.
+- Publicar el trabajo desde un fork o repositorio fuente identificable.
 
-git clone <URL_DE_TU_FORK>
-Set-Location .\<NOMBRE_DEL_REPOSITORIO>
+## Requisitos previos
 
-git remote -v
-```
+- Node.js compatible con la versión declarada por el proyecto.
+- El gestor de paquetes utilizado por el repositorio (`pnpm`, `npm` o `yarn`). Los comandos de ejemplo usan `pnpm` porque es el flujo documentado actualmente.
+- Acceso al fork o repositorio fuente del proyecto.
 
-Comprueba que `origin` apunta a tu fork. Si necesitas conservar el repositorio original como referencia, agrega un remoto `upstream` usando la URL que GitHub muestre para el original:
-
-```powershell
-git remote add upstream <URL_DEL_REPOSITORIO_ORIGINAL>
-git remote -v
-```
-
-### Crear una rama de trabajo y publicar cambios
-
-```powershell
-git switch -c docs/readme-cobertura
-# Realiza los cambios y revisa los archivos modificados
-git status --short
-
-git add README.md evidencia\resultado-pruebas-rick-morty-app.jpg evidencia\resultado-pruebas-rick-morty-html.jpg
-git commit -m "docs: documentar fork, cobertura y evidencia"
-git push --set-upstream origin docs/readme-cobertura
-```
-
-Después, abre el fork en GitHub y crea un Pull Request si el flujo del proyecto lo requiere. No se afirma aquí que el fork ni el Pull Request ya existan: deben verificarse en la cuenta correspondiente.
-
-## 2. Instalar y ejecutar el proyecto
+## Instalación y ejecución
 
 Desde la raíz del repositorio:
 
-```powershell
+```bash
 pnpm install
 pnpm dev
 ```
 
-Abre la dirección local que muestre Next.js en la consola, normalmente `http://localhost:3000`. Si el proyecto usa otra configuración, utiliza la URL que indique la salida del comando.
+La aplicación debe iniciarse con el script definido en `package.json`. Si el proyecto usa otro gestor, sustituye `pnpm` por el equivalente, sin cambiar la configuración de Vitest.
 
-## 3. Ejecutar las pruebas y verificar el conteo
+## Configuración de Vitest
 
-Ejecuta primero la suite normal:
+La configuración debe estar versionada junto con el proyecto. Antes de entregar, comprueba qué archivo usa realmente el repositorio; los nombres habituales son:
 
-```powershell
+- `vitest.config.ts` o `vitest.config.js`.
+- `vite.config.ts` con la configuración de `test` integrada.
+- `package.json`, sección `scripts` y, si corresponde, sección `vitest`.
+
+La configuración debe contemplar, según la implementación del proyecto:
+
+- Entorno de pruebas para componentes React, normalmente `jsdom`.
+- Integración con Testing Library cuando se prueban componentes.
+- Alias de imports utilizados por la aplicación (por ejemplo, `@/`).
+- Proveedor de cobertura compatible con Vitest.
+- Patrones de inclusión y exclusión coherentes con el código fuente.
+- Generación del reporte HTML en `coverage/`.
+
+No se deben afirmar opciones concretas que no estén presentes en el fork. La evidencia de entrega debe mostrar el archivo de configuración real y el `package.json` usado.
+
+## Alcance de las pruebas
+
+### Componentes React
+
+Las pruebas de interfaz deben comprobar el comportamiento observable, no únicamente la implementación interna. Como mínimo, documenta casos como:
+
+- Renderizado de datos de un personaje.
+- Estados `Alive`, `Dead` y otros estados disponibles.
+- Enlaces o navegación a episodios/personajes.
+- Estados vacíos, carga y errores cuando estén implementados.
+- Interacciones relevantes del componente.
+
+### Utilidades
+
+Las pruebas de utilidades deben cubrir entradas normales y límites, por ejemplo:
+
+- Transformación o normalización de datos de la API.
+- Formateo de nombres, episodios o fechas.
+- Listas vacías y valores opcionales.
+- Resultados esperados para entradas inválidas, si la utilidad los contempla.
+
+### Lógica de negocio y API
+
+Las pruebas de lógica de negocio deben aislar dependencias externas mediante mocks o stubs y cubrir tanto éxito como error. El material de trabajo incluye casos para funciones como `getCharacters`, `getCharacter` y `getEpisodes`, incluyendo páginas personalizadas, respuestas fallidas y listas de episodios vacías.
+
+Ejecuta las pruebas sin depender de la API real: una prueba reproducible no debe requerir red ni modificar datos externos.
+
+## Scripts y comandos
+
+Los nombres de scripts dependen del `package.json` del fork. Como referencia, el flujo mínimo es:
+
+```bash
+# Ejecutar todas las pruebas una vez
+pnpm exec vitest run
+
+# Ejecutar cobertura: comando exigido por la asignación
+pnpm exec vitest run --coverage
+```
+
+Si existe un script equivalente, también puede utilizarse:
+
+```bash
 pnpm test
-```
-
-Registra el resultado de la consola. La evidencia aportada **reporta 30 tests pasaron**, pero este README no lo marca como verificado porque no se ejecutó la suite dentro de este entorno. Para comprobarlo de forma explícita, guarda la salida y revisa el resumen que imprima Vitest:
-
-```powershell
-pnpm test 2>&1 | Tee-Object -FilePath .\test-output.txt
-Get-Content .\test-output.txt | Select-Object -Last 30
-```
-
-Si el proyecto no tiene un script `test`, consulta los scripts disponibles y usa el comando definido por el repositorio:
-
-```powershell
-(Get-Content .\package.json -Raw | ConvertFrom-Json).scripts
-```
-
-## 4. Generar y revisar el reporte HTML de cobertura
-
-Ejecuta el script de cobertura configurado por el proyecto:
-
-```powershell
 pnpm test:coverage
 ```
 
-Si ese script no existe, revisa `package.json` antes de sustituirlo por el comando equivalente del proyecto. No se debe asumir el nombre del script sin comprobarlo.
+En cualquier caso, la evidencia debe incluir explícitamente la invocación efectiva de:
 
-Busca el archivo de entrada generado:
-
-```powershell
-Test-Path .\coverage\index.html
-Get-ChildItem .\coverage -Recurse -File | Select-Object FullName
+```bash
+vitest run --coverage
 ```
 
-Abre el reporte HTML localmente:
+## Cobertura e informe HTML
 
-```powershell
-Start-Process .\coverage\index.html
+La ejecución de cobertura debe producir, como mínimo:
+
+```text
+coverage/
+└── index.html
 ```
 
-También puede servirse desde un servidor local. Por ejemplo, si el proyecto copia explícitamente la carpeta a `public`, comprueba primero que exista:
+Después de ejecutar el comando, abre `coverage/index.html` en un navegador y conserva una captura donde sean visibles las cuatro métricas: **Statements, Branches, Functions y Lines**. No sustituyas el reporte por una cifra escrita manualmente.
 
-```powershell
-Test-Path .\public\coverage\index.html
-```
+La carpeta `coverage/` suele ser un artefacto generado y puede estar excluida de Git. Si no se versiona, entrega la captura o el artefacto solicitado por la asignación; la configuración y los tests sí deben quedar en el repositorio.
 
-La ruta `http://localhost:3000/coverage/index.html` solo es válida si `coverage` está dentro de un directorio público servido por la aplicación. No se debe publicar el reporte en esa ruta sin verificarlo.
+## Evidencia de entrega
 
-### Qué comprobar en el HTML
+La entrega debe incluir evidencia legible y trazable:
 
-- **Statements:** 100 %.
-- **Branches:** 100 %.
-- **Functions:** 100 %.
-- **Lines:** 100 %.
-- Que el resumen corresponda a la ejecución actual y no a un reporte antiguo.
-- Que las rutas y nombres de archivos del reporte coincidan con la versión publicada.
+1. **Consola:** captura del comando `vitest run --coverage`, el resultado exitoso de Vitest y la tabla de cobertura.
+2. **Reporte HTML:** captura de `coverage/index.html` mostrando Statements, Branches, Functions y Lines.
+3. **Repositorio:** URL del fork o repositorio fuente y rama o commit evaluado.
+4. **Archivos de configuración:** `package.json`, configuración de Vitest/Vite y configuración de TypeScript si interviene en la ejecución.
+5. **Pruebas:** ubicación de los archivos de test de componentes React, utilidades y lógica de negocio/API.
 
-## 5. Subir el reporte HTML de cobertura
+En este proyecto se han preparado referencias de evidencia con nombres como:
 
-Elige una estrategia coherente con las reglas del repositorio:
+- `resultado-pruebas-rick-morty-app.jpg` — consola o ejecución de pruebas.
+- `resultado-pruebas-rick-morty-html.jpg` — reporte HTML de cobertura.
 
-### Opción A: publicar el reporte como artefacto de CI
+Verifica que esos archivos correspondan al mismo commit que se entrega. Las imágenes por sí solas no reemplazan el código, la configuración ni la URL del repositorio.
 
-1. Ejecuta `pnpm test:coverage` en GitHub Actions.
-2. Configura el workflow para conservar la carpeta `coverage` como artefacto.
-3. Descarga el artefacto desde la ejecución del workflow para inspeccionarlo.
-4. Documenta en el Pull Request el enlace que GitHub genere para esa ejecución.
+## Fork y repositorio fuente
 
-El enlace exacto depende del repositorio y de la ejecución; no se inventa en este documento.
+Completa estos datos con los valores reales del proyecto antes de publicar la entrega:
 
-### Opción B: versionar el HTML en una rama o carpeta pública
+- **Repositorio/fork:** `<URL pública del fork o repositorio fuente>`
+- **Rama evaluada:** `<nombre de rama>`
+- **Commit evaluado:** `<hash del commit>`
+- **Directorio del proyecto:** `<ruta si el proyecto no está en la raíz>`
 
-Solo si la política del proyecto lo permite:
+Comandos útiles para documentar la procedencia:
 
-```powershell
-git status --short
-# Revisa qué generó la herramienta antes de agregarlo
-git add coverage\
-git commit -m "test: actualizar reporte HTML de cobertura"
-git push
-```
-
-Si `coverage` está excluido por `.gitignore`, no fuerces su inclusión sin confirmar que está permitido. Para revisar las reglas aplicables:
-
-```powershell
-Get-Content .\.gitignore
- git check-ignore -v .\coverage\index.html
-```
-
-> El reporte HTML puede contener muchos archivos auxiliares. Para que los enlaces internos funcionen, sube la carpeta completa, no solo `index.html`.
-
-## 6. Evidencia incluida
-
-Las dos capturas aportadas están incluidas en este entregable y se referencian con rutas relativas:
-
-### Resultado de pruebas y ejecución local
-
-![Resultado de pruebas de Rick and Morty Explorer](evidencia/resultado-pruebas-rick-morty-app.jpg)
-
-La captura muestra el resumen de cobertura en la aplicación y la salida de desarrollo local. Su contenido sirve como evidencia aportada, pero no sustituye una ejecución reproducible.
-
-### Reporte HTML de cobertura
-
-![Reporte HTML de cobertura](evidencia/resultado-pruebas-rick-morty-html.jpg)
-
-La captura muestra el reporte HTML con 100 % en Statements, Branches, Functions y Lines.
-
-## 7. Criterios de cumplimiento
-
-Marca cada criterio únicamente después de comprobarlo:
-
-- [ ] El fork existe en la cuenta correcta de GitHub.
-- [ ] `origin` apunta al fork y no a un repositorio ajeno.
-- [ ] Los cambios se publicaron en una rama y commit identificables.
-- [ ] `pnpm install` termina correctamente.
-- [ ] La aplicación inicia con `pnpm dev`.
-- [ ] `pnpm test` termina correctamente.
-- [ ] La consola confirma el número de pruebas esperado: **30 pasaron**, si ese es el resultado de la ejecución actual.
-- [ ] `pnpm test:coverage` genera `coverage/index.html` o la ruta equivalente configurada.
-- [ ] El HTML actual muestra 100 % en Statements, Branches, Functions y Lines.
-- [ ] El reporte se conserva como artefacto de CI o se versiona según la política del proyecto.
-- [ ] La evidencia tiene rutas relativas válidas y los archivos están incluidos.
-- [ ] No se suben credenciales, tokens, secretos ni archivos locales innecesarios.
-
-## Estado actual de esta entrega
-
-- **Capturas:** incluidas en `evidencia/`.
-- **Cobertura visible en las capturas:** 100 % Statements, 100 % Branches, 100 % Functions y 100 % Lines.
-- **Suite:** se reportan 30 pruebas pasadas en el material disponible; **pendiente de verificación ejecutando `pnpm test`**.
-- **Fork, URL y publicación en GitHub:** no verificados en este entorno; no se inventa ningún enlace.
-- **Reporte HTML completo:** no se recibió como carpeta o archivo HTML; se incluyó la captura del reporte. Debe generarse y subirse desde el repositorio siguiendo la sección 5.
-
-## Comprobación final antes de publicar
-
-```powershell
-# Estado y remotos
-git status --short
+```bash
 git remote -v
-
-# Validar archivos de evidencia
-Test-Path .\evidencia\resultado-pruebas-rick-morty-app.jpg
-Test-Path .\evidencia\resultado-pruebas-rick-morty-html.jpg
-
-# Ejecutar validación
-pnpm test
-pnpm test:coverage
-Test-Path .\coverage\index.html
-
-# Revisar cambios antes de commit
-git diff --check
+git branch --show-current
+git rev-parse HEAD
 git status --short
 ```
 
-Si todas las comprobaciones aplicables son satisfactorias, publica el commit en el fork y adjunta en el Pull Request el resultado de pruebas, el método usado para conservar el reporte HTML y las capturas de evidencia.
-=======
-# Rick and Morty Explorer 🧪
+## Lista de comprobación
 
-Una aplicación web moderna para explorar el universo de Rick and Morty, construida con Next.js 15, React 19 y Tailwind CSS v4.
+- [ ] El fork o repositorio fuente está identificado con URL, rama y commit.
+- [ ] `package.json` contiene los scripts y dependencias usados por Vitest.
+- [ ] La configuración de Vitest/Vite está versionada.
+- [ ] Hay pruebas de componentes React.
+- [ ] Hay pruebas de utilidades.
+- [ ] Hay pruebas de lógica de negocio/API con dependencias externas aisladas.
+- [ ] `vitest run --coverage` termina correctamente.
+- [ ] `coverage/index.html` se genera.
+- [ ] Statements supera 80 %.
+- [ ] Branches supera 80 %.
+- [ ] Functions supera 80 %.
+- [ ] Lines supera 80 %.
+- [ ] Se adjuntan capturas de consola y del HTML correspondientes al mismo commit.
 
-## 🚀 Características
+## Nota de verificación
 
-- **Exploración de Personajes**: Navega a través de todos los personajes de la serie con una interfaz de cuadrícula responsive.
-- **Detalle de Personaje**: Información detallada de cada personaje, incluyendo origen, ubicación y episodios.
-- **Paginación**: Navegación fluida entre páginas de resultados.
-- **Diseño Responsive**: Optimizado para móviles, tablets y escritorio.
-- **Modo Oscuro**: Interfaz oscura por defecto con estética acorde a la serie.
-- **Server-Side Rendering (SSR)**: Carga rápida y SEO optimizado gracias a Next.js App Router.
-
-## 🛠️ Tecnologías
-
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Biblioteca UI**: [React 19](https://react.dev/)
-- **Estilos**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **API**: [The Rick and Morty API](https://rickandmortyapi.com/)
-- **Tipado**: TypeScript
-
-## 📦 Instalación y Ejecución Local
-
-1.  **Clonar el repositorio** (o descargar el código):
-    ```bash
-    git clone <tu-repositorio>
-    cd my-app
-    ```
-
-2.  **Instalar dependencias**:
-    ```bash
-    npm install
-    # o
-    pnpm install
-    # o
-    yarn install
-    ```
-
-3.  **Ejecutar el servidor de desarrollo**:
-    ```bash
-    npm run dev
-    # o
-    pnpm dev
-    # o
-    yarn dev
-    ```
-
-4.  Abrir [http://localhost:3000](http://localhost:3000) en tu navegador.
-
-## 🚀 Despliegue
-
-La forma más sencilla de desplegar esta aplicación es utilizando [Vercel](https://vercel.com/new).
-
-1.  Sube tu código a un repositorio de GitHub, GitLab o Bitbucket.
-2.  Importa el proyecto en Vercel.
-3.  Vercel detectará automáticamente que es un proyecto Next.js.
-4.  Haz clic en **Deploy**.
-
-## 📂 Estructura del Proyecto
-
-- `src/app`: Rutas de la aplicación (App Router).
-  - `page.tsx`: Página principal (lista de personajes).
-  - `character/[id]/page.tsx`: Página de detalle de personaje.
-  - `loading.tsx` / `error.tsx`: Estados de carga y error.
-  - `layout.tsx`: Layout principal con Header y Footer.
-- `src/components`: Componentes reutilizables (`CharacterCard`, `Pagination`).
-- `src/lib`: Lógica de cliente API (`api.ts`).
-- `src/types`: Definiciones de tipos TypeScript (`rickandmorty.ts`).
-
-## ✅ Requisitos Cumplidos
-
-- [x] Consumo de API de Personajes.
-- [x] Vista de cuadrícula con imagen, nombre, estado y especie.
-- [x] Paginación.
-- [x] Vista de detalle con información completa.
-- [x] Lista de episodios en la vista de detalle.
-- [x] Enrutamiento cliente-servidor (Next.js).
-- [x] Diseño Responsive.
-- [x] Loading states y manejo de errores.
->>>>>>> e9f4d1a8ed0afc7e0d25100640608ed62ebf1ef0
+Las métricas y el resultado perfecto de las pruebas indicados al inicio son un **estado confirmado por la persona responsable**, no una medición reproducida por este README. Para convertirlo en evidencia verificable, ejecuta el comando exigido desde el fork evaluado y conserva el reporte generado por Vitest.
