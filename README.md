@@ -46,6 +46,41 @@ pnpm dev
 
 La aplicación debe iniciarse con el script definido en `package.json`. Si el proyecto usa otro gestor, sustituye `pnpm` por el equivalente, sin cambiar la configuración de Vitest.
 
+## Docker 🐳
+
+La aplicación incluye un `Dockerfile` multi-stage y un `.dockerignore` para generar una imagen de producción ligera, portable y reproducible.
+
+### Requisitos previos
+
+- Docker instalado y en ejecución (Docker Desktop en Windows/Mac, o el motor de Docker en Linux).
+
+### Construir la imagen
+
+Desde la raíz del proyecto:
+
+```bash
+docker build -t rick-and-morty-explorer .
+```
+
+El `Dockerfile` usa una build multi-stage: instala dependencias con `pnpm install --frozen-lockfile`, compila la aplicación con `next build` y produce una imagen final que solo contiene el build de producción.
+
+### Ejecutar el contenedor
+
+```bash
+docker run -p 3000:3000 rick-and-morty-explorer
+```
+
+Esto expone la aplicación en el puerto `3000` y ejecuta `next start`.
+
+### Verificar la aplicación
+
+Abre [http://localhost:3000](http://localhost:3000) en el navegador. Deberías ver la aplicación Rick and Morty Explorer servida desde el contenedor.
+
+### Archivos de contenerización
+
+- `Dockerfile` — define la imagen multi-stage (dependencias → build → producción).
+- `.dockerignore` — excluye `node_modules`, `.next`, `.env` y archivos temporales para que el contexto de construcción sea pequeño y seguro.
+
 ## Configuración de Vitest
 
 La configuración debe estar versionada junto con el proyecto. Antes de entregar, comprueba qué archivo usa realmente el repositorio; los nombres habituales son:
@@ -180,6 +215,8 @@ git status --short
 - [ ] Functions supera 80 %.
 - [ ] Lines supera 80 %.
 - [ ] Se adjuntan capturas de consola y del HTML correspondientes al mismo commit.
+- [ ] El `Dockerfile` construye la imagen correctamente (`docker build`).
+- [ ] El contenedor se ejecuta sin errores (`docker run`) y la app es accesible en el puerto 3000.
 
 ## Nota de verificación
 
